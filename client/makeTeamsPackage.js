@@ -3,7 +3,7 @@ var fs = require('fs');
 var AdmZip = require("adm-zip");
 var zip = new AdmZip();
 
-let dir = __dirname + '/manifest.template.json';
+let dir = '../package/manifest.template.json';
 fs.readFile(dir, 'utf8', function (err, data) {
     if (err != null) {
         console.log(err);
@@ -19,14 +19,14 @@ fs.readFile(dir, 'utf8', function (err, data) {
         }
     });
     
-    fs.writeFile('package/manifest.json', data, 'utf-8', (err, data) => {
+    fs.writeFile('../package/manifest.json', data, 'utf-8', (err, data) => {
         if (err) throw err;
 
-        zip.addLocalFile(`package/manifest.json`);
-        zip.addLocalFile(`package/icon32.png`);
-        zip.addLocalFile(`package/icon240.png`);
+        zip.addLocalFile(`../package/manifest.json`);
+        zip.addLocalFile(`../package/icon32.png`);
+        zip.addLocalFile(`../package/icon240.png`);
 
-        zip.writeZip(`package/support-tickets-teamsapp.zip`);
-        console.log(`Created app package package/support-tickets-teamsappp.zip`);
+        zip.writeZip(`../package/support-tickets-teamsapp.zip`);
+        console.log(`Created app package ../package/support-tickets-teamsappp.zip`);
     });
 });
