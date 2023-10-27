@@ -3,32 +3,32 @@
   "manifestVersion": "1.12",
   "version": "1.3.0",
   "id": "732f7ae7-ace5-45d2-a45e-84fcedd4f933",
-  "packageName": "com.gauravkeshre.sample.rightshift",
+  "packageName": "com.gauravkeshre.sample.supporttickets",
   "developer": {
     "name": "Gaurav Keshre",
-    "websiteUrl": "https://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app/",
-    "privacyUrl": "https://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app/privacy.html",
-    "termsOfUseUrl": "https://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app/termsofuse.html"
+    "websiteUrl": "https://tjt1wndn-3000.inc1.devtunnels.ms/",
+    "privacyUrl": "https://tjt1wndn-3000.inc1.devtunnels.ms/privacy.html",
+    "termsOfUseUrl": "https://tjt1wndn-3000.inc1.devtunnels.ms/termsofuse.html"
   },
   "icons": {
       "color": "icon240.png",
       "outline": "icon32.png"
   },
   "name": {
-    "short": "Right Shift",
-    "full": "Right Shift"
+    "short": "Support Tickets",
+    "full": "Support Tickets"
   },
   "description": {
     "short": "This app allows user to login using SSO and log attendence.",
-    "full": "A simple react application for Microsoft Teams. This app allows user to login using SSO and log issues. Some parts of this app are supposed to work in offline."
+    "full": "A simple react application for Microsoft Teams. This app allows user to login using SSO and log attendence."
   },
   "accentColor": "#5296d5",
   "staticTabs": [
     {
       "entityId": "Index",
       "name": "Index",
-      "contentUrl": "https://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app",
-      "websiteUrl": "https://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app",
+      "contentUrl": "https://tjt1wndn-3000.inc1.devtunnels.ms",
+      "websiteUrl": "https://tjt1wndn-3000.inc1.devtunnels.ms",
       "scopes": [
         "personal"
       ]
@@ -40,11 +40,11 @@
       "messageTeamMembers"
   ],
   "validDomains": [
-      "a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app"
+      "tjt1wndn-3000.inc1.devtunnels.ms"
   ],
   "webApplicationInfo": {
       "id": "8530bcef-fd23-428f-aa09-2c7be548cfbc",
-      "resource": "api://a021-2404-f801-8028-3-5927-79a8-fe2c-d935.ngrok-free.app/8530bcef-fd23-428f-aa09-2c7be548cfbc"
+      "resource": "api://tjt1wndn-3000.inc1.devtunnels.ms/8530bcef-fd23-428f-aa09-2c7be548cfbc"
   },
   "devicePermissions": [
     "media"

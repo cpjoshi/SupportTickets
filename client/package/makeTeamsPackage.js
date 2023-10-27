@@ -26,7 +26,7 @@ fs.readFile(dir, 'utf8', function (err, data) {
         zip.addLocalFile(`package/icon32.png`);
         zip.addLocalFile(`package/icon240.png`);
 
-        zip.writeZip(`package/rightshift-teamsapp.zip`);
-        console.log(`Created app package package/rightshift-teamsappp.zip`);
+        zip.writeZip(`package/support-tickets-teamsapp.zip`);
+        console.log(`Created app package package/support-tickets-teamsappp.zip`);
     });
 });
