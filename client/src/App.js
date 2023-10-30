@@ -1,8 +1,9 @@
 // App.js
 import * as microsoftTeams from '@microsoft/teams-js';
-import React, { useState, useEffect } from 'react';
-import IssueForm from './IssueForm';
+import React, { useState, useEffect, useContext } from 'react';
+import IssueForm from './forms/IssueForm';
 import './App.css';
+import { TeamsContext } from './Main';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('Staged');
@@ -11,6 +12,7 @@ const App = () => {
   const [isNewIssueFormVisible, setNewIssueFormVisibility] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isNetworkAvailable, setNetworkAvailability] = useState(true);
+  const teamsContext = useContext(TeamsContext);
 
   useEffect(() => {
     const checkNetwork = () => {
@@ -124,6 +126,11 @@ const App = () => {
 
   return (
     <div className="app-container">
+      <h2>Context</h2>
+      <p>{JSON.stringify(teamsContext.context)}</p>
+      <hr></hr>
+      <h2>TOKEN</h2>
+      <p>{JSON.stringify(teamsContext.token)}</p>
       <div className="tabs">
         <button
           className={activeTab === 'Staged' ? 'active-tab' : ''}

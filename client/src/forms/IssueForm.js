@@ -1,6 +1,6 @@
 // IssueForm.js
 import React, { useState, useEffect } from 'react';
-import './IssueForm.css';
+import '../style/IssueForm.css';
 
 const IssueForm = ({ onSave, onClose, selectedIssue }) => {
   const [description, setDescription] = useState('');
