@@ -11,11 +11,6 @@ function TabBar({ tabs, onTabChange }) {
     return index === 0;
   }
 
-  // useEffect(() => {
-  //   console.log("... useEffect: tabs: " + tabs[0]);
-  //   setActiveTab( tabs[0] );
-  // }, [tabs]);
-
   return (
     <div className="tabs">
       {

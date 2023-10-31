@@ -14,7 +14,8 @@ const App = () => {
     <div className="app-container">
       <Tab>
       {AppTabs.map((tab, index) => (
-        <TabContent tab={tab} key={index}/>
+        <TabContent tab={tab} key={index}>
+        </TabContent>
       ))}
       </Tab>
     </div>

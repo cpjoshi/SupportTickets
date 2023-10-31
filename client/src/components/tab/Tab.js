@@ -1,11 +1,11 @@
-import React, { useState, createContext, Children } from 'react';
+import React, { useState, createContext, Children, useEffect } from 'react';
 import TabBar from './TabBar';
 import { TabContent } from './TabContent';
 // Create a context for the active tab
 export const TabContext = createContext({});
 
 const Tab = ({ children }) => {
-    const [activeTab, setActiveTab] = useState({ title: 'def-title', key: 'def-key', content: 'def-content' });
+    const [activeTab, setActiveTab] = useState(null);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -17,6 +17,14 @@ const Tab = ({ children }) => {
     }
     );
 
+    const shouldShowTabContent = (tab, index) => {
+        if (activeTab) {
+            return activeTab.key === tab.key
+        }else {
+            return index === 0;
+        }
+    }
+
     return (
         <div>
         <TabContext.Provider value={activeTab}>
@@ -24,7 +32,7 @@ const Tab = ({ children }) => {
             {
              tabs.map((tab, index) => {
                 return (
-                    activeTab.key === tab.key ? <TabContent tab={tab}/> : null
+                    shouldShowTabContent(tab, index) ? <TabContent tab={tab}/> : null
                 );   
             })}
         </TabContext.Provider>
