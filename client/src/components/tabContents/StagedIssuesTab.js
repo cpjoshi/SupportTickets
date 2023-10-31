@@ -5,9 +5,6 @@ function StagedIssuesTab(props) {
     const [selectedIssue, setSelectedIssue] = useState(null);
 
 
-  const handleCreateNewIssue = () => {
-    // call parent 
-  };
 
   const handleDeleteStagedIssue = (issueId) => {
     // call parent 
