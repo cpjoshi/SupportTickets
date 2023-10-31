@@ -27,7 +27,6 @@ function StagedIssuesTab(props) {
     return (
      <div>
             <h2>Staged Issues</h2>
-            <button onClick={handleCreateNewIssue}>Create New Issue</button>
             <table className="styled-table">
               <thead>
                 <tr>

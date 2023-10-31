@@ -1,15 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import * as microsoftTeams from '@microsoft/teams-js';
-
+import {TeamsContext} from '../../Main';
 function LiveIssuesTab(props) {
     const [serverIssues, setServerIssues] = useState([]);
     const [isNetworkAvailable, setNetworkAvailability] = useState(true);
-
+    const teamsToken = useContext(TeamsContext).token;
+    
     useEffect(() => {
         const fetchServerIssues = () => {
           microsoftTeams.initialize();
     
-          let authHeader = 'Bearer ' + process.env.REACT_APP_TOKEN;
+          let authHeader = 'Bearer ' + teamsToken;
           console.log(authHeader);
           fetch('/api/issues', {headers: {Authorization: authHeader}})
           .then((res) => {
