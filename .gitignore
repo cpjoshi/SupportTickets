@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+#teamspackage
+package/manifest.json
+package/support-tickets-teamsapp.zip
+client/makeTeamsPackage.js
+
+#macos
+.DS_Store
