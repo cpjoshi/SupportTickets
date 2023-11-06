@@ -3,8 +3,7 @@ import React, {useState, useEffect} from 'react';
 function StagedIssuesTab(props) {
     const [stagedIssues, setStagedIssues] = useState([]);
     const [selectedIssue, setSelectedIssue] = useState(null);
-
-
+    
 
   const handleDeleteStagedIssue = (issueId) => {
     // call parent 

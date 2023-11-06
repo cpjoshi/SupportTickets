@@ -1,109 +1,122 @@
 /* IssueForm.css */
 .issue-form-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    max-width: 400px;
-    width: 100%;
-  }
-  
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+}
+
 .issue-form-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .close-button {
-cursor: pointer;
-background: none;
-border: none;
-font-size: 18px;
-color: #888282;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888282;
 }
 
 .issue-form-body {
-margin-top: 20px;
+  margin-top: 20px;
 }
 
 .issue-form-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .issue-form {
-    width: 100%;
-    max-width: 400px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin: 20px;
-  }
-  
-  .form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .form-content {
-    padding: 20px;
-  }
-  
-  .form-field {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  .form-footer {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-  
-  button.close-button,
-  button.save-button,
-  button.cancel-button {
-    padding: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-  
-  
-  button.save-button {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  button.cancel-button {
-    background-color: #95a5a6;
-    color: white;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.issue-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  color: white;
+}
+
+.form-content {
+  padding: 20px;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input, select{
+  width: 100%;
+  height: 32;
+  padding: 12px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+button.close-button,
+button.save-button,
+button.cancel-button {
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+
+button.save-button {
+  background-color: #3498db;
+  color: white;
+}
+
+button.cancel-button {
+  background-color: #545f5f;
+  color: white;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 30%;
+  aspect-ratio: 1/1;
+  border: 1px dashed #555;
+background-color: #edf4fa;
+}
+

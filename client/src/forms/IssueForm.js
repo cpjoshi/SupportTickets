@@ -2,6 +2,9 @@
 import * as microsoftTeams from '@microsoft/teams-js';
 import React, { useState, useEffect } from 'react';
 import '../style/IssueForm.css';
+import defaultIcon from '../default-image.svg';
+import {Priority, Status} from '../models/FormsModel';
+import DropDown from '../components/DropDown';
 
 const IssueForm = ({ onSave, onClose, selectedIssue }) => {
   const [description, setDescription] = useState('');
@@ -46,6 +49,7 @@ const IssueForm = ({ onSave, onClose, selectedIssue }) => {
       (error, attachments) => {
         if (error) {
           console.error('Error selecting image:', error);
+          alert('Error selecting image:' + error)
           return;
         }
 
@@ -58,19 +62,13 @@ const IssueForm = ({ onSave, onClose, selectedIssue }) => {
         var src = "data:" + attachment.mimeType + ";base64," + attachment.preview;
         setImage(src);
       }
-    );  
+    );
   };
 
   return (
-    <div className="issue-form-container">
+    <div >
+      <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
       
-      <div className="issue-form-header">
-        <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
-        <button className="close-button" onClick={onClose}>
-          &#10006;
-        </button>
-      </div>
-
       <div className="issue-form-body">
         <label htmlFor="description">Description:</label>
         <input
@@ -81,29 +79,19 @@ const IssueForm = ({ onSave, onClose, selectedIssue }) => {
         />
 
         <label htmlFor="priority">Priority:</label>
-        <input
-          type="text"
-          id="priority"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        />
+        <DropDown id="priority" options={Priority} onChange={(e) => setPriority(e.target.value)}/>
 
         <label htmlFor="status">Status:</label>
-        <input
-          type="text"
-          id="status"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        />
-
-        <div> 
-        <label htmlFor="image">Image:</label>
-        <button className="upload-button" onClick={(e) => selectImage(e.target.value)}>
-          Pick Image
-          </button>
-          <image src={image} />
+        <DropDown id="status" options={Status} onChange={(e) => setStatus(e.target.value)}/>
+        
+        <div>
+          <label htmlFor="image">Image:</label>
+          <div className="image-container" onClick={(e) => selectImage(e.target.value)}>
+            <img id="image" className='image-box' src={image || defaultIcon} alt="Issue"/>
+          </div>
         </div>
       </div>
+
       <div className="form-footer">
         <button className="save-button" onClick={handleSave}>
           Save
