@@ -4,13 +4,14 @@ import { Tab } from './components/tab/Tab';
 import { TabContent } from './components/tab/TabContent';
 
 const App = () => {
+
   return (
     <div className="app-container">
       <Tab>
-      {AppTabs.map((tab, index) => (
-        <TabContent tab={tab} key={index}>
-        </TabContent>
-      ))}
+        {AppTabs.map((tab, index) => (
+          <TabContent tab={tab} key={index}>
+          </TabContent>
+        ))}
       </Tab>
     </div>
   );

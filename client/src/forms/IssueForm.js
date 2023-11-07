@@ -6,7 +6,7 @@ import defaultIcon from '../default-image.svg';
 import {Priority, Status} from '../models/FormsModel';
 import DropDown from '../components/DropDown';
 
-const IssueForm = ({ onSave, onClose, selectedIssue }) => {
+const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('');
   const [status, setStatus] = useState('');
@@ -66,7 +66,7 @@ const IssueForm = ({ onSave, onClose, selectedIssue }) => {
   };
 
   return (
-    <div >
+    <div className='issue-form-container' >
       <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
       
       <div className="issue-form-body">
