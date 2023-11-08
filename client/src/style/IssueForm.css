@@ -8,6 +8,7 @@
   padding: 20px;
   max-width: 400px;
   width: 100%;
+  border-radius: 5px;
 
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
@@ -90,8 +91,13 @@ input, select{
 
 .form-footer {
   display: flex;
-  flex-direction: column;
-  padding: 10px;
+    flex-direction: row-reverse;
+    padding: 10px;
+    justify-content: flex-start;
+}
+
+.form-footer button {
+ width: 200px;;
 }
 
 button.close-button,
@@ -102,25 +108,24 @@ button.cancel-button {
   cursor: pointer;
 }
 
-
 button.save-button {
-  background-color: #3498db;
-  color: white;
+  background-color: var( --primary-color);
+  color:white;
 }
 
 button.cancel-button {
-  background-color: #545f5f;
+  background-color: var(--gray-color);
   color: white;
 }
 
-.image-container {
+.issue-form-container img {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
   width: 30%;
   aspect-ratio: 1/1;
   border: 1px dashed #555;
-background-color: #edf4fa;
+  background-color: #edf4fa;
+  object-fit: cover;
 }
 

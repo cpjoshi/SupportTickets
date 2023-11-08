@@ -1,4 +1,4 @@
-import './App.css';
+import './style/App.css';
 import { AppTabs } from './models/AppTabsModel'
 import { Tab } from './components/tab/Tab';
 import { TabContent } from './components/tab/TabContent';

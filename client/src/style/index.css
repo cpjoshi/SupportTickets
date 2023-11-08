@@ -1,11 +1,13 @@
 :root {
   --primary-background-color:#edf4fa;
   --primary-color: #5296d5;
+  --light-blue-color: #c5e9fc;
   
   --action-label-color: #fff;
   --action-contstructive-color: #96d552;
   --action-destructive-color: #d55254;
 
+  --gray-color:#545f5f;
   --icon-active-color: #101e2a;
   --icon-disabled-color: #DCEAF6;
 }
@@ -26,6 +28,6 @@ code {
 }
 
 button {
-  background-color: #7fdb34;
-  color: white;
+  background-color: var( --primary-color);
+  color: var(--primary-background-color);
 }

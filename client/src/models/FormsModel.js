@@ -1,13 +1,7 @@
 export const Priority = [
-    { label: 'High', value: 'high' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Low', value: 'low' }
+    'High', 'Medium', 'Low'
 ];
 
-
 export const Status = [
-    { label: 'Open', value: 'open' },
-    { label: 'In Progress', value: 'inprogress' },
-    { label: 'Completed', value: 'complete' },
-    { label: 'Closed', value: 'closed' },
+    'Open', 'Active', 'Completed', 'Closed'
 ];
