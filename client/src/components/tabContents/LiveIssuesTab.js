@@ -3,6 +3,7 @@ import * as microsoftTeams from '@microsoft/teams-js';
 import { TeamsContext } from '../../Main';
 import { FullPageError } from '../../models/ErrorModel';
 import ErrorPage from '../ErrorPage';
+import IssueTable from './IssueTable';
 
 function LiveIssuesTab(props) {
   const [apiFetchError, setAPIFetchError] = useState(null); // TODO: use this to show error message
@@ -68,26 +69,14 @@ function LiveIssuesTab(props) {
 
   const liveIssuesPage = () => {
     return (
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {serverIssues.map((issue) => (
-            <tr key={issue.id}>
-              <td>{issue.id}</td>
-              <td>{issue.description}</td>
-              <td>{issue.priority}</td>
-              <td>{issue.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>);
+      <div> 
+        <div className='hint-box'>
+          <p >Issues that have been fetched from server.</p>
+        </div>
+        <br/>       
+      <IssueTable issues={serverIssues}/>
+      </div>
+      );
   };
 
   if (!isNetworkAvailable) {

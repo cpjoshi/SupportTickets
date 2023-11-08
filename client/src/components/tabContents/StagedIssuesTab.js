@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import IssueForm from '../../forms/IssueForm';
 import { FullPageError } from '../../models/ErrorModel';
 import ErrorPage from '../ErrorPage';
+import IssueTable from './IssueTable';
 
 function StagedIssuesTab(props) {
   const [stagedIssues, setStagedIssues] = useState([]);
@@ -9,16 +10,23 @@ function StagedIssuesTab(props) {
   const [isFomVisible, setFormVisibility] = useState(false);
 
 
-  const handleDeleteStagedIssue = (issueId) => {
-    // call parent 
+  const handleDeleteStagedIssue = (issue) => {
+    alert('TODO: handle delete');
   };
 
   const handleEditIssue = (issue) => {
-    // call parent 
+    showForm(issue);
   };
 
-  const showForm = () => {
+  const showForm = (issue) => {
+    setSelectedIssue(issue);
     setFormVisibility(true);
+  };
+
+
+  const hideForm = () => {
+    setSelectedIssue(null);
+    setFormVisibility(false);
   };
 
   const handleCreateNewIssue = (newIssue) => {
@@ -40,7 +48,7 @@ function StagedIssuesTab(props) {
   };
 
   const handleCloseIssueForm = () => {
-    setFormVisibility(false);
+    hideForm()
   }
 
   useEffect(() => {
@@ -53,51 +61,25 @@ function StagedIssuesTab(props) {
     console.log('TODO: handle retry');
   };
 
+  const rowUpdateAction = {
+    title: "Delete",
+    actionHandler: (issue) => {
+      handleDeleteStagedIssue(issue.id);
+    }
+  };
+
   const stagedIssuesPage = () => {
     return (
       <div>
-        <h2>Staged Issues</h2>
         <div className='hint-box'>
           <p >Issues that have been created or updated but not yet saved.</p>
           <p>Click on an issue to edit it.</p>
-          <p>Click the <em>x</em> to delete an issue.</p>
         </div>
-
         <br />
 
         <button onClick={showForm}>Create New Issue</button>
-
-        <table className="styled-table">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stagedIssues.map((issue) => (
-              <tr key={issue.id} onClick={() => handleEditIssue(issue)}>
-                <td>{issue.description}</td>
-                <td>{issue.priority}</td>
-                <td>{issue.status}</td>
-                <td>
-                  <button
-                    className="delete-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteStagedIssue(issue.id);
-                    }}
-                  >
-                    &#10006;
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
+        <IssueTable issues={stagedIssues} onRowTap={handleEditIssue} rowUpdateAction={rowUpdateAction} />
+       
         {isFomVisible && (
           <IssueForm
             onSave={handleCreateNewIssue}
