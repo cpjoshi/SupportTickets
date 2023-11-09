@@ -1,10 +1,11 @@
 import React from 'react';
 
 function DropDown(props) {
-  const { options, onChange, key } = props;
+  const { options, onChange, idKey} = props;
 
   return (
-    <select id={key} onChange={onChange} >
+    <select id={idKey} onChange={onChange} defaultValue="Select an option">
+      <option disabled>Select an option</option>
       {options.map((option, index) => (
         <option key={index} value={option}>
           {option}

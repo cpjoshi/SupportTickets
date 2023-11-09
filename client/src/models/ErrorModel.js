@@ -4,6 +4,7 @@ import IconNoInternet from '../assets/icon-no-internet.svg';
 
 // Define the FullPageErrorenum
 export const FullPageError = {
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
   NO_DATA: 'NO_DATA',
   NO_RESULTS: 'NO_RESULTS',
   NO_INTERNET: 'NO_INTERNET'

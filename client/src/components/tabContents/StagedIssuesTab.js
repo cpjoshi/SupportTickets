@@ -2,118 +2,97 @@ import React, { useState, useEffect } from 'react';
 import IssueForm from '../../forms/IssueForm';
 import { FullPageError } from '../../models/ErrorModel';
 import ErrorPage from '../ErrorPage';
+import IssueTable from './IssueTable';
+import IncidentRepository from '../../db/IncidentRepository';
 
 function StagedIssuesTab(props) {
   const [stagedIssues, setStagedIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isFomVisible, setFormVisibility] = useState(false);
+  const [rerender, setRerender] = useState(false);
 
 
-  const handleDeleteStagedIssue = (issueId) => {
-    // call parent 
-  };
+  const incidentRepo = new IncidentRepository();
 
-  const handleEditIssue = (issue) => {
-    // call parent 
-  };
-
-  const showForm = () => {
+  const showForm = (issue) => {
+    setSelectedIssue(issue);
     setFormVisibility(true);
   };
 
-  const handleCreateNewIssue = (newIssue) => {
-    if (selectedIssue) {
-      const updatedStagedIssues = stagedIssues.map((issue) =>
-        issue.id === selectedIssue.id ? { ...issue, ...newIssue } : issue
-      );
-
-      setStagedIssues(updatedStagedIssues);
-      localStorage.setItem('stagedIssues', JSON.stringify(updatedStagedIssues));
-    } else {
-      const updatedStagedIssues = [...stagedIssues, newIssue];
-      setStagedIssues(updatedStagedIssues);
-      localStorage.setItem('stagedIssues', JSON.stringify(updatedStagedIssues));
-    }
-
+  const hideForm = (shouldRefresh) => {
+    setSelectedIssue(null);
     setFormVisibility(false);
-    // setActiveTab('Staged');
+    
+    if (shouldRefresh) {
+      setRerender(!rerender);
+    }
   };
 
-  const handleCloseIssueForm = () => {
-    setFormVisibility(false);
+  const handleCreateNewIssue = (issue) => {
+    if (issue) {
+      incidentRepo.enqueueForSync(issue);
+      setRerender(!rerender);
+      hideForm(true);
+    }
   }
 
   useEffect(() => {
-    const storedStagedIssues = JSON.parse(localStorage.getItem('stagedIssues')) || [];
-    setStagedIssues(storedStagedIssues);
-  }, []);
+    incidentRepo.getRecords().then((issues) => {
+      setStagedIssues(issues);
+    })
+  }, [rerender]);
 
 
-  const handleRetry = () => {
-    console.log('TODO: handle retry');
+  //// UI Elements
+  const header = <div>
+    <div className='hint-box'>
+      <p >Issues that have been created or updated but not yet saved.</p>
+      <p>Click on an issue to edit it.</p>
+    </div>
+    <br />
+    <button onClick={showForm}>Create New Issue</button>
+  </div>
+
+  const form = isFomVisible && <IssueForm onSave={handleCreateNewIssue} onClose={hideForm} selectedIssue={selectedIssue} />;
+
+  //// Emtpy State
+  if (stagedIssues?.length === 0) {
+    return <div>
+      {header}
+      <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={showForm} />;
+      {form}
+    </div>
+  }
+
+  //// Data Handling
+
+  const handleDeleteStagedIssue = (issue) => {
+    incidentRepo.deleteRecord(issue.id);
   };
+
+  const handleEditIssue = (issue) => {
+    showForm(issue);
+  };
+
+  const rowUpdateAction = {
+    title: '\u2715',
+    actionHandler: (issue) => {
+      handleDeleteStagedIssue(issue.id);
+    }
+  };
+
 
   const stagedIssuesPage = () => {
     return (
       <div>
-        <h2>Staged Issues</h2>
-        <div className='hint-box'>
-          <p >Issues that have been created or updated but not yet saved.</p>
-          <p>Click on an issue to edit it.</p>
-          <p>Click the <em>x</em> to delete an issue.</p>
-        </div>
-
-        <br />
-
-        <button onClick={showForm}>Create New Issue</button>
-
-        <table className="styled-table">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stagedIssues.map((issue) => (
-              <tr key={issue.id} onClick={() => handleEditIssue(issue)}>
-                <td>{issue.description}</td>
-                <td>{issue.priority}</td>
-                <td>{issue.status}</td>
-                <td>
-                  <button
-                    className="delete-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteStagedIssue(issue.id);
-                    }}
-                  >
-                    &#10006;
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {isFomVisible && (
-          <IssueForm
-            onSave={handleCreateNewIssue}
-            onClose={handleCloseIssueForm}
-            selectedIssue={selectedIssue}
-          />
-        )}
+        {header}
+        <IssueTable issues={stagedIssues} onRowTap={handleEditIssue} rowUpdateAction={rowUpdateAction} />
+        {form}
       </div>
     );
   };
 
-  if (stagedIssues === null || stagedIssues.length === 0) {
-    return <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={handleRetry} />;
-  } else {
-    return stagedIssuesPage();
-  }
+  return stagedIssuesPage();
 
 }
 

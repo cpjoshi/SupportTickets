@@ -13,6 +13,7 @@
 }
 
 button {
+  border-radius: 2px;
   margin-right: 10px;
   margin-bottom: 10px;
   padding: 10px;
@@ -52,6 +53,7 @@ button.active-tab {
   padding: 8px;
   text-align: left;
   cursor: pointer;
+  min-height: 26px;
 }
 
 .styled-table th {
@@ -63,23 +65,23 @@ button.active-tab {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  /* Adjust the width as needed */
   height: 20px;
-  /* Adjust the height as needed */
   color: red;
   cursor: pointer;
-  font-size: 16px;
-  border: none;
-  background: none;
+  font-size: 20px;
+  background-color: transparent;
 }
 
-.styled-table td button {
+.styled-table td img {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 50px;
+  aspect-ratio: 1/1;
+  border: 1px dashed #555;
+  background-color: #edf4fa;
+  object-fit: cover;
 }
+
 
 /* Hover effect for desktop */
 .styled-table tr:hover {
@@ -97,13 +99,12 @@ button.active-tab {
   }
 }
 
-
-
 .hint-box {
   border: 1px solid whitesmoke;
   background-color: whitesmoke; 
   color: gray;
   font-size: 14px;
+  padding-left: 5px;
 
 }
 
@@ -112,14 +113,13 @@ button.active-tab {
   color: red;
 }
 
-
-
 .error-page {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   height: 100vh;
+  color: gray;
 }
 
 .error-page img {
@@ -128,7 +128,7 @@ button.active-tab {
   margin-bottom: 20px;
   width: 30%;
   aspect-ratio: 1/1;
-  filter: invert(100%) sepia(0%) saturate(6167%) hue-rotate(272deg) brightness(121%) contrast(75%);
+  filter: invert(90%) sepia(1%) saturate(62%) hue-rotate(314deg) brightness(80%) contrast(84%);
 }
 
 .error-page h1 {
