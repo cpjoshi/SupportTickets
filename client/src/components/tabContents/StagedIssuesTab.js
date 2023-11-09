@@ -12,6 +12,9 @@ function StagedIssuesTab(props) {
   const [shouldRerender, setShouldRerender] = useState(false);
   const incidentRepo = new IncidentRepository();
 
+
+  /// Form Visibility
+
   const showForm = (issue) => {
     setSelectedIssue(issue);
     setFormVisibility(true);
@@ -25,6 +28,8 @@ function StagedIssuesTab(props) {
       setShouldRerender(!shouldRerender);
     }
   };
+
+  //// Actions
 
   const handleCreateNewIssue = (newIssue) => {
     if (selectedIssue) {
@@ -43,6 +48,7 @@ function StagedIssuesTab(props) {
 
 
   //// UI Elements
+
   const header = <div>
     <div className='hint-box'>
       <p >Issues that have been created or updated but not yet saved.</p>
@@ -55,6 +61,7 @@ function StagedIssuesTab(props) {
   const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} />;
 
   //// Emtpy State
+
   if (stagedIssues?.length === 0) {
     return <div>
       {header}
@@ -65,12 +72,9 @@ function StagedIssuesTab(props) {
 
   //// Data Handling
 
-  const handleDeleteStagedIssue = (issue) => {
-    incidentRepo.deleteRecord(issue.id);
-  };
-
-  const handleEditIssue = (issue) => {
-    showForm(issue);
+  const handleDeleteStagedIssue = (issueId) => {
+    incidentRepo.deleteRecord(issueId);
+    setShouldRerender(!shouldRerender);
   };
 
   const rowUpdateAction = {
@@ -84,7 +88,7 @@ function StagedIssuesTab(props) {
     return (
       <div>
         {header}
-        <IssueTable issues={stagedIssues} onRowTap={handleEditIssue} rowUpdateAction={rowUpdateAction} />
+        <IssueTable issues={stagedIssues} onRowTap={e => showForm(e)} rowUpdateAction={rowUpdateAction} />
         {form}
       </div>
     );
