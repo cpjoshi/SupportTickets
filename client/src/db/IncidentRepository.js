@@ -39,7 +39,7 @@ class IncidentRepository {
         return keys
     }
 
-    async enqueueForSync(incidentRecord) {
+    async saveRecord(incidentRecord) {
         await this.db.createObjectStore([this.tableName]);
         this.db.putValue(this.tableName, incidentRecord);
     }

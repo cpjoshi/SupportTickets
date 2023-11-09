@@ -30,7 +30,7 @@ function StagedIssuesTab(props) {
     if (selectedIssue) {
       incidentRepo.updateRecordById(selectedIssue.id, newIssue);
     } else if (newIssue) {
-      incidentRepo.enqueueForSync(newIssue);
+      incidentRepo.saveRecord(newIssue);
     }
     hideForm(true);
   }
@@ -49,16 +49,16 @@ function StagedIssuesTab(props) {
       <p>Click on an issue to edit it.</p>
     </div>
     <br />
-    <button onClick={showForm}>Create New Issue</button>
+    <button onClick={e => showForm(null)}> Create New Issue</button>
   </div>
 
-  const form = isFomVisible && <IssueForm onSave={handleCreateNewIssue} onClose={hideForm} selectedIssue={selectedIssue} />;
+  const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} />;
 
   //// Emtpy State
   if (stagedIssues?.length === 0) {
     return <div>
       {header}
-      <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={showForm} />;
+      <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={e => showForm(null)} />;
       {form}
     </div>
   }
