@@ -23,6 +23,16 @@ class IncidentRepository {
         return keys.length;
     }
 
+    async updateRecordById(id, updatedRecord) {
+        await this.db.createObjectStore([this.tableName]);
+        const record = await this.db.getValue(this.tableName, id);
+        if (!record) {
+            throw new Error(`Record with ID ${id} not found`);
+        }
+        const updatedRecordWithId = { ...updatedRecord, id };
+        await this.db.putValue(this.tableName, updatedRecordWithId);
+    }
+
     async getRecords() {
         await this.db.createObjectStore([this.tableName]);
         const keys = await this.db.getAllValue(this.tableName);

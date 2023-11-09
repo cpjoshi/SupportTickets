@@ -74,8 +74,9 @@ button.active-tab {
 
 .styled-table td img {
   display: flex;
+  justify-content: center;
   align-items: center;
-  width: 50px;
+  width: 30px;
   aspect-ratio: 1/1;
   border: 1px dashed #555;
   background-color: #edf4fa;

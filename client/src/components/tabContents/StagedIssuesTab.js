@@ -9,9 +9,7 @@ function StagedIssuesTab(props) {
   const [stagedIssues, setStagedIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isFomVisible, setFormVisibility] = useState(false);
-  const [rerender, setRerender] = useState(false);
-
-
+  const [shouldRerender, setShouldRerender] = useState(false);
   const incidentRepo = new IncidentRepository();
 
   const showForm = (issue) => {
@@ -24,23 +22,24 @@ function StagedIssuesTab(props) {
     setFormVisibility(false);
     
     if (shouldRefresh) {
-      setRerender(!rerender);
+      setShouldRerender(!shouldRerender);
     }
   };
 
-  const handleCreateNewIssue = (issue) => {
-    if (issue) {
-      incidentRepo.enqueueForSync(issue);
-      setRerender(!rerender);
-      hideForm(true);
+  const handleCreateNewIssue = (newIssue) => {
+    if (selectedIssue) {
+      incidentRepo.updateRecordById(selectedIssue.id, newIssue);
+    } else if (newIssue) {
+      incidentRepo.enqueueForSync(newIssue);
     }
+    hideForm(true);
   }
 
   useEffect(() => {
     incidentRepo.getRecords().then((issues) => {
       setStagedIssues(issues);
     })
-  }, [rerender]);
+  }, [shouldRerender]);
 
 
   //// UI Elements
@@ -81,7 +80,6 @@ function StagedIssuesTab(props) {
     }
   };
 
-
   const stagedIssuesPage = () => {
     return (
       <div>
@@ -93,7 +91,6 @@ function StagedIssuesTab(props) {
   };
 
   return stagedIssuesPage();
-
 }
 
 export default StagedIssuesTab;
