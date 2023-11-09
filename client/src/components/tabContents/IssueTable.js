@@ -28,29 +28,25 @@ function IssueTable({ issues, rowUpdateAction, onRowTap }) {
             <td>{issue.status}</td>
             <td>
               {issue.image && <img
-                src={issue.imageUrl}
+                src={issue.image}
                 alt="Issue"
                 onClick={() => handleImageClick(issue.imageUrl)}
               />}
             </td>
             {
               rowUpdateAction && 
-              <td className='delete-button' onClick={(e) => {
+              <td onClick={(e) => {
                 e.stopPropagation();
                 rowUpdateAction.actionHandler(issue);
-              }
-            }>
-                {rowUpdateAction.title}
+              }}>
+              <button className='delete-button'>
+                {rowUpdateAction.title} 
+              </button>
+                
             </td>}
           </tr>
         ))}
       </tbody>
-
-      {selectedImage && (
-        <div className="popup">
-          <img src={selectedImage} alt="Selected Issue" />
-        </div>
-      )}
     </table>
   );
 }

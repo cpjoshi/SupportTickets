@@ -5,7 +5,7 @@ import '../style/IssueForm.css';
 import defaultIcon from '../default-image.svg';
 import { Priority, Status } from '../models/FormsModel';
 import DropDown from '../components/DropDown';
-
+import { v4 as uuid } from "uuid";
 
 const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
   const [description, setDescription] = useState('');
@@ -25,16 +25,37 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
 
   const handleSave = () => {
     const updatedIssue = {
-      id: selectedIssue ? selectedIssue.id : generateUniqueId(),
+      uid: selectedIssue ? selectedIssue.uid : uuid(),
       description,
       priority,
       status,
       image
     };
 
+    let errors = validateFields(updatedIssue);
+
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
+      return;
+    }
+
     console.log(updatedIssue);
     onSave(updatedIssue);
   };
+
+  function validateFields(updatedIssue) {
+    let errors = [];
+    if (updatedIssue.description === '') {
+        errors.push('Description is required');
+    }
+    if (updatedIssue.status === '') {
+        errors.push('Status is required');
+    }
+    if (updatedIssue.priority === '') {
+        errors.push('Priority is required');
+    }
+    return errors;
+}
 
   const generateUniqueId = () => {
     return '_' + Math.random().toString(36).substr(2, 9);
@@ -72,7 +93,7 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
 
       <div className="issue-form-header">
         <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
-        <button className="close-button" onClick={onClose}> &#10006; </button>
+        <button className="close-button" onClick={onClose}> &#9587; </button>
       </div>
 
       <div className="issue-form-body">
@@ -86,10 +107,10 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         />
 
         <label htmlFor="priority">Priority:</label>
-        <DropDown key="priority" options={Priority} onChange={(e) => setPriority(e.target.value)} />
+        <DropDown idKey="priority" options={Priority} onChange={(e) => setPriority(e.target.value)} />
 
         <label htmlFor="status">Status:</label>
-        <DropDown key="status" options={Status} onChange={(e) => setStatus(e.target.value)} />
+        <DropDown idKey="status" options={Status} onChange={(e) => setStatus(e.target.value)} />
 
         <label htmlFor="image">Image:</label>
         <img id="image" src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
