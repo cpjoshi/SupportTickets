@@ -2,18 +2,23 @@
 import '../style/IssueForm.css';
 
 import * as microsoftTeams from '@microsoft/teams-js';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Priority, Status } from '../models/FormsModel';
 import { v4 as uuid } from "uuid";
 
 import DropDown from '../components/DropDown';
-import defaultIcon from '../assets/default-image.svg';
+import defaultIcon from '../assets/default-image.png';
 
 const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState(selectedIssue ? selectedIssue.priority : Priority[0]);
   const [status, setStatus] = useState(selectedIssue ? selectedIssue.status :Status[0]);
   const [image, setImage] = useState(null);
+  const descriptionRef = useRef();
+
+  useEffect(() => {
+    descriptionRef.current.focus();
+ }, []);
 
   useEffect(() => {
     // If a selected issue is provided, populate the form fields
@@ -59,10 +64,6 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
     return errors;
 }
 
-  const generateUniqueId = () => {
-    return '_' + Math.random().toString(36).substr(2, 9);
-  };
-
   const selectImage = () => {
     microsoftTeams.media.selectMedia(
       {
@@ -104,6 +105,7 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         <input
           type="text"
           id="description"
+          ref={descriptionRef}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -115,7 +117,7 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         <DropDown name="status" options={Status} onChange={(e) => setStatus(e.target.value)} value={status}/>
 
         <label htmlFor="image">Image:</label>
-        <img id="image" src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
+        <img id="image" className={image == null ? 'default': ''} src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
 
       </div>
 

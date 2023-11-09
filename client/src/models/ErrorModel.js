@@ -1,6 +1,6 @@
-import IconNoData from '../assets/icon-error.svg';
-import IconNoResults from '../assets/icon-no-result.svg';
-import IconNoInternet from '../assets/icon-no-internet.svg';
+import IconNoData from '../assets/icon-no-data.png';
+import IconNoInternet from '../assets/icon-no-internet.png';
+import IconError from '../assets/icon-error.png';
 
 // Define the FullPageErrorenum
 export const FullPageError = {
@@ -24,7 +24,7 @@ export const getFullPageErrorInfo = (fullPageError) => {
     case FullPageError.NO_RESULTS:
       title = 'No Results Found';
       description = 'Your search did not match any results.';
-      icon = IconNoResults;
+      icon = IconNoData;
       actionTitle = 'Retry';
       break;
     case FullPageError.NO_INTERNET:
@@ -36,7 +36,7 @@ export const getFullPageErrorInfo = (fullPageError) => {
     default:
       title = 'Something Went Wrong';
       description = 'An unexpected error occurred.';
-      icon = IconNoData;
+      icon = IconError;
       actionTitle = '';
   }
 
