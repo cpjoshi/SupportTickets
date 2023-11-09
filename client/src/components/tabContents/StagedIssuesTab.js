@@ -32,12 +32,16 @@ function StagedIssuesTab(props) {
   //// Actions
 
   const handleCreateNewIssue = (newIssue) => {
+    let promise;
     if (selectedIssue) {
-      incidentRepo.updateRecordById(selectedIssue.id, newIssue);
+      promise = incidentRepo.updateRecordById(selectedIssue.id, newIssue);
     } else if (newIssue) {
-      incidentRepo.saveRecord(newIssue);
+      promise = incidentRepo.saveRecord(newIssue);
     }
-    hideForm(true);
+
+    promise.then(() => {
+      hideForm(true);
+    });
   }
 
   useEffect(() => {
@@ -51,8 +55,8 @@ function StagedIssuesTab(props) {
 
   const header = <div>
     <div className='hint-box'>
-      <p >Issues that have been created or updated but not yet saved.</p>
-      <p>Click on an issue to edit it.</p>
+      <p> - Issues that have been created or updated but not yet saved.</p>
+      <p> - Click on an issue to edit it.</p>
     </div>
     <br />
     <button onClick={e => showForm(null)}> Create New Issue</button>

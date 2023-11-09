@@ -2,11 +2,6 @@
 import React, { useState } from 'react';
 
 function IssueTable({ issues, rowUpdateAction, onRowTap }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl);
-  };
 
   return (
     <table className="styled-table">
@@ -30,7 +25,6 @@ function IssueTable({ issues, rowUpdateAction, onRowTap }) {
               {issue.image && <img
                 src={issue.image}
                 alt="Issue"
-                onClick={() => handleImageClick(issue.imageUrl)}
               />}
             </td>
             {
@@ -41,8 +35,7 @@ function IssueTable({ issues, rowUpdateAction, onRowTap }) {
               }}>
               <button className='delete-button'>
                 {rowUpdateAction.title} 
-              </button>
-                
+              </button> 
             </td>}
           </tr>
         ))}

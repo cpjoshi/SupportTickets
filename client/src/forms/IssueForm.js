@@ -1,16 +1,18 @@
 // IssueForm.js
+import '../style/IssueForm.css';
+
 import * as microsoftTeams from '@microsoft/teams-js';
 import React, { useState, useEffect } from 'react';
-import '../style/IssueForm.css';
-import defaultIcon from '../default-image.svg';
 import { Priority, Status } from '../models/FormsModel';
-import DropDown from '../components/DropDown';
 import { v4 as uuid } from "uuid";
+
+import DropDown from '../components/DropDown';
+import defaultIcon from '../assets/default-image.svg';
 
 const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState(Priority[0]);
-  const [status, setStatus] = useState(Status[0]);
+  const [priority, setPriority] = useState(selectedIssue ? selectedIssue.priority : Priority[0]);
+  const [status, setStatus] = useState(selectedIssue ? selectedIssue.status :Status[0]);
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -107,10 +109,10 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         />
 
         <label htmlFor="priority">Priority:</label>
-        <DropDown idKey="priority" options={Priority} onChange={(e) => setPriority(e.target.value)} />
+        <DropDown name="priority" options={Priority} onChange={(e) => setPriority(e.target.value)} value={priority} />
 
         <label htmlFor="status">Status:</label>
-        <DropDown idKey="status" options={Status} onChange={(e) => setStatus(e.target.value)} />
+        <DropDown name="status" options={Status} onChange={(e) => setStatus(e.target.value)} value={status}/>
 
         <label htmlFor="image">Image:</label>
         <img id="image" src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
