@@ -1,4 +1,4 @@
-import React, { useState, createContext, Children, useEffect } from 'react';
+import React, { useState, createContext, Children } from 'react';
 import TabBar from './TabBar';
 import { TabContent } from './TabContent';
 // Create a context for the active tab

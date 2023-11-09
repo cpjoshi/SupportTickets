@@ -10,10 +10,12 @@ TeamsContext.displayName = "TeamsContext";
 function Main() {
     const [teamsContext, setTeamsContext] = useState(null);
     const [teamsAuthToken, setTeamsAuthToken] = useState(null);
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);    
+
 
     useEffect(() => {
         async function getTeamsContext() {
+            setIsLoading(true);
             let isInsideTeams = await inTeams();
             if (isInsideTeams) {
                 let ctx = await msteams.app.getContext();
@@ -21,6 +23,7 @@ function Main() {
             } else {
                 setTeamsContext(null);
             }
+            setIsLoading(false);
         }
         getTeamsContext();
 
@@ -28,11 +31,13 @@ function Main() {
 
     useEffect(() => {
         async function performAuth() {
+            setIsLoading(true);
             if (teamsContext == null) {
                 return;
             }
             let token = await msteams.authentication.getAuthToken();
             setTeamsAuthToken(token);
+            setIsLoading(false);
         }
         performAuth();
 
@@ -43,6 +48,7 @@ function Main() {
     return (
         <div>
             {
+                isLoading ? <h1>Loading...</h1> :
                 teamsContext ? <TeamsAppWrapper context={teamsContext} token={teamsAuthToken} /> : WebPage()
             }
         </div>

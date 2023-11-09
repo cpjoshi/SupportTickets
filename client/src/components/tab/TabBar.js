@@ -18,7 +18,7 @@ function TabBar({ tabs, onTabChange }) {
           return (
             <button
             key={index}
-            className={isSelected(tab, index) ? 'active-tab' : ''}
+            className={isSelected(tab, index) ? 'active-tab' : 'tab'}
             onClick={() => handleTap(tab)}>
             {tab.title}
           </button>

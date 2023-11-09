@@ -1,21 +1,20 @@
 import StagedIssuesTab from '../components/tabContents/StagedIssuesTab';
 import LiveIssuesTab from '../components/tabContents/LiveIssuesTab';
-import IssueForm from '../forms/IssueForm';
+
 export const AppTabs = [
     { title: 'Staged', key: 'staged' },
-    { title: 'Live Issues', key: 'live' },
-    { title: 'Create New Issue', key: 'form' }
+    { title: 'Live Issues', key: 'live' }
 ];
 
-export const componentForTab = (tab) => {
+export const componentForTab = (tab, actionHandler) => {
     switch (tab.key) {
         case 'staged':
-            return (<StagedIssuesTab />);
+            return (<StagedIssuesTab actionHandler={actionHandler} />);
         case 'live':
-            return (<LiveIssuesTab />);
-        case 'form':
-            return (<IssueForm />);
+            return (<LiveIssuesTab actionHandler={actionHandler}/>);
         default:
             return null;
     }
 }
+
+

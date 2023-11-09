@@ -1,45 +1,105 @@
 // IssueForm.js
-import React, { useState, useEffect } from 'react';
 import '../style/IssueForm.css';
 
-const IssueForm = ({ onSave, onClose, selectedIssue }) => {
+import * as microsoftTeams from '@microsoft/teams-js';
+import React, { useState, useEffect } from 'react';
+import { Priority, Status } from '../models/FormsModel';
+import { v4 as uuid } from "uuid";
+
+import DropDown from '../components/DropDown';
+import defaultIcon from '../assets/default-image.svg';
+
+const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('');
-  const [status, setStatus] = useState('');
+  const [priority, setPriority] = useState(selectedIssue ? selectedIssue.priority : Priority[0]);
+  const [status, setStatus] = useState(selectedIssue ? selectedIssue.status :Status[0]);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     // If a selected issue is provided, populate the form fields
     if (selectedIssue) {
       setDescription(selectedIssue.description || '');
       setPriority(selectedIssue.priority || '');
-      setStatus(selectedIssue.status || '');
+      setStatus(selectedIssue.status || '');  
+      setImage(selectedIssue.image || null);
     }
   }, [selectedIssue]);
 
   const handleSave = () => {
     const updatedIssue = {
-      id: selectedIssue ? selectedIssue.id : generateUniqueId(),
+      uid: selectedIssue ? selectedIssue.uid : uuid(),
       description,
       priority,
       status,
+      image
     };
 
+    let errors = validateFields(updatedIssue);
+
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
+      return;
+    }
+
+    console.log(updatedIssue);
     onSave(updatedIssue);
   };
+
+  function validateFields(updatedIssue) {
+    let errors = [];
+    if (updatedIssue.description === '') {
+        errors.push('Description is required');
+    }
+    if (updatedIssue.status === '') {
+        errors.push('Status is required');
+    }
+    if (updatedIssue.priority === '') {
+        errors.push('Priority is required');
+    }
+    return errors;
+}
 
   const generateUniqueId = () => {
     return '_' + Math.random().toString(36).substr(2, 9);
   };
 
+  const selectImage = () => {
+    microsoftTeams.media.selectMedia(
+      {
+        mediaType: microsoftTeams.media.MediaType.Image,
+        maxMediaCount: 1,
+        imageMaxWidth: 200,
+        imageMaxHeight: 200
+      },
+      (error, attachments) => {
+        if (error) {
+          console.error('Error selecting image:', error);
+          alert('Error selecting image:' + error)
+          return;
+        }
+
+        if (attachments.length === 0) {
+          console.log('No image attachment received');
+          return;
+        }
+
+        const attachment = attachments[0];
+        var src = "data:" + attachment.mimeType + ";base64," + attachment.preview;
+        setImage(src);
+      }
+    );
+  };
+
   return (
-    <div className="issue-form-container">
+    <div className='issue-form-container' >
+
       <div className="issue-form-header">
         <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
-        <button className="close-button" onClick={onClose}>
-          &#10006;
-        </button>
+        <button className="close-button" onClick={onClose}> &#9587; </button>
       </div>
+
       <div className="issue-form-body">
+        
         <label htmlFor="description">Description:</label>
         <input
           type="text"
@@ -49,28 +109,19 @@ const IssueForm = ({ onSave, onClose, selectedIssue }) => {
         />
 
         <label htmlFor="priority">Priority:</label>
-        <input
-          type="text"
-          id="priority"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        />
+        <DropDown name="priority" options={Priority} onChange={(e) => setPriority(e.target.value)} value={priority} />
 
         <label htmlFor="status">Status:</label>
-        <input
-          type="text"
-          id="status"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        />
+        <DropDown name="status" options={Status} onChange={(e) => setStatus(e.target.value)} value={status}/>
+
+        <label htmlFor="image">Image:</label>
+        <img id="image" src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
+
       </div>
+
       <div className="form-footer">
-        <button className="save-button" onClick={handleSave}>
-          Save
-        </button>
-        <button className="cancel-button" onClick={onClose}>
-          Cancel
-        </button>
+        <button className="save-button" onClick={handleSave}> Save </button>
+        <button className="cancel-button" onClick={onClose}> Cancel </button>
       </div>
     </div>
   );

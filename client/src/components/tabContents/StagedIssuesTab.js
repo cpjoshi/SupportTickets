@@ -1,64 +1,104 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import IssueForm from '../../forms/IssueForm';
+import { FullPageError } from '../../models/ErrorModel';
+import ErrorPage from '../ErrorPage';
+import IssueTable from './IssueTable';
+import IncidentRepository from '../../db/IncidentRepository';
 
 function StagedIssuesTab(props) {
-    const [stagedIssues, setStagedIssues] = useState([]);
-    const [selectedIssue, setSelectedIssue] = useState(null);
+  const [stagedIssues, setStagedIssues] = useState([]);
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [isFomVisible, setFormVisibility] = useState(false);
+  const [shouldRerender, setShouldRerender] = useState(false);
+  const incidentRepo = new IncidentRepository();
 
 
-  const handleCreateNewIssue = () => {
-    // call parent 
+  /// Form Visibility
+
+  const showForm = (issue) => {
+    setSelectedIssue(issue);
+    setFormVisibility(true);
   };
 
-  const handleDeleteStagedIssue = (issueId) => {
-    // call parent 
+  const hideForm = (shouldRefresh) => {
+    setSelectedIssue(null);
+    setFormVisibility(false);
+    
+    if (shouldRefresh) {
+      setShouldRerender(!shouldRerender);
+    }
   };
 
-  const handleEditIssue = (issue) => {
-    // call parent 
-  };
+  //// Actions
+
+  const handleCreateNewIssue = (newIssue) => {
+    let promise;
+    if (selectedIssue) {
+      promise = incidentRepo.updateRecordById(selectedIssue.id, newIssue);
+    } else if (newIssue) {
+      promise = incidentRepo.saveRecord(newIssue);
+    }
+
+    promise.then(() => {
+      hideForm(true);
+    });
+  }
 
   useEffect(() => {
-    const storedStagedIssues = JSON.parse(localStorage.getItem('stagedIssues')) || [];
-    setStagedIssues(storedStagedIssues);
-  }, []);
+    incidentRepo.getRecords().then((issues) => {
+      setStagedIssues(issues);
+    })
+  }, [shouldRerender]);
 
 
+  //// UI Elements
 
+  const header = <div>
+    <div className='hint-box'>
+      <p> - Issues that have been created or updated but not yet saved.</p>
+      <p> - Click on an issue to edit it.</p>
+    </div>
+    <br />
+    <button onClick={e => showForm(null)}> Create New Issue</button>
+  </div>
+
+  const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} />;
+
+  //// Emtpy State
+
+  if (stagedIssues?.length === 0) {
+    return <div>
+      {header}
+      <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={e => showForm(null)} />;
+      {form}
+    </div>
+  }
+
+  //// Data Handling
+
+  const handleDeleteStagedIssue = (issueId) => {
+    incidentRepo.deleteRecord(issueId);
+    setShouldRerender(!shouldRerender);
+  };
+
+  const rowUpdateAction = {
+    title: '\u2715',
+    actionHandler: (issue) => {
+      handleDeleteStagedIssue(issue.id);
+    }
+  };
+
+  const stagedIssuesPage = () => {
     return (
-     <div>
-            <h2>Staged Issues</h2>
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th>Priority</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stagedIssues.map((issue) => (
-                  <tr key={issue.id} onClick={() => handleEditIssue(issue)}>
-                    <td>{issue.description}</td>
-                    <td>{issue.priority}</td>
-                    <td>{issue.status}</td>
-                    <td>
-                      <button
-                        className="delete-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteStagedIssue(issue.id);
-                        }}
-                      >
-                        &#10006;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div>
+        {header}
+        <IssueTable issues={stagedIssues} onRowTap={e => showForm(e)} rowUpdateAction={rowUpdateAction} />
+        {form}
+      </div>
     );
+  };
+
+  return stagedIssuesPage();
 }
 
 export default StagedIssuesTab;
