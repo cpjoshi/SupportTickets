@@ -21,7 +21,11 @@ function Main() {
                 let ctx = await msteams.app.getContext();
                 setTeamsContext(ctx);
             } else {
-                setTeamsContext(null);
+                if(window.location.href.includes("?purpose=test")) {
+                    setTeamsContext({"userId": "testUser"});
+                } else {
+                    setTeamsContext(null);
+                }
             }
             setIsLoading(false);
         }
@@ -33,6 +37,12 @@ function Main() {
         async function performAuth() {
             setIsLoading(true);
             if (teamsContext == null) {
+                return;
+            }
+
+            if (teamsContext.userId === "testUser") {
+                setTeamsAuthToken(process.env.REACT_APP_TOKEN);
+                setIsLoading(false);
                 return;
             }
             let token = await msteams.authentication.getAuthToken();

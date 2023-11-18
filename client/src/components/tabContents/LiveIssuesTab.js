@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import * as microsoftTeams from '@microsoft/teams-js';
 import { TeamsContext } from '../../Main';
 import { FullPageError } from '../../models/ErrorModel';
 import ErrorPage from '../ErrorPage';
@@ -12,8 +11,6 @@ function LiveIssuesTab(props) {
   const teamsToken = useContext(TeamsContext).token;
 
   const fetchServerIssues = (token) => {
-    microsoftTeams.initialize();
-
     let authHeader = 'Bearer ' + token;
     console.log(authHeader);
     fetch('/api/issues', { headers: { Authorization: authHeader } })
@@ -48,20 +45,23 @@ function LiveIssuesTab(props) {
 
 
   useEffect(() => {
-
-    // Add event listener to fetch server issues when online
-    const handleOnline = () => {
-      fetchServerIssues();
+    const handleOnline = async () => {
+      setNetworkAvailability(navigator.onLine);
+      if(navigator.onLine) {
+        await fetchServerIssues(teamsToken);
+      };  
     };
 
     window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOnline);
 
     // Clean up event listener on component unmount
     return () => {
       window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOnline);
     };
-
   }, []);
+
 
   const handleRetry = () => {
     console.log('TODO: handle retry');
@@ -84,7 +84,7 @@ function LiveIssuesTab(props) {
   } else if (apiFetchError != null || serverIssues.length === 0) {
     return <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={handleRetry} />;
   } else {
-    return liveIssuesPage;
+    return liveIssuesPage();
   }
 }
 
