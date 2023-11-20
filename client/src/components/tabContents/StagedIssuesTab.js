@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import IssueForm from '../../forms/IssueForm';
 import { FullPageError } from '../../models/ErrorModel';
 import ErrorPage from '../ErrorPage';
 import IssueTable from './IssueTable';
 import IncidentRepository from '../../db/IncidentRepository';
+import { TeamsContext } from '../../Main';
 
 function StagedIssuesTab(props) {
   const [stagedIssues, setStagedIssues] = useState([]);
+  const [syncingIssues, setSyncingIssues] = useState(new Set());
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isFomVisible, setFormVisibility] = useState(false);
   const [shouldRerender, setShouldRerender] = useState(false);
   const incidentRepo = new IncidentRepository();
-
+  const teamsToken = useContext(TeamsContext).token;
 
   /// Form Visibility
 
@@ -44,6 +46,44 @@ function StagedIssuesTab(props) {
     });
   }
 
+  const handleSync = async () => {
+    // Iterate over stagedIssues and post each issue to "/api/issues"
+    for (const stagedIssue of stagedIssues) {
+      try {
+        // Start syncing, add issue to syncingIssues
+        setSyncingIssues((prevSyncingIssues) => new Set([...prevSyncingIssues, stagedIssue.id]));
+
+        const response = await fetch('/api/issues', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${teamsToken}`,
+          },
+          body: JSON.stringify(stagedIssue),
+        });
+
+        if (response.ok) {
+          // If successful, delete the issue from incidentRepo
+          incidentRepo.deleteRecord(stagedIssue.id);
+        } else {
+          console.error(`Failed to sync issue ${stagedIssue.id}. Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error(`Error syncing issue ${stagedIssue.id}:`, error);
+      } finally {
+        // Stop syncing, remove issue from syncingIssues
+        setSyncingIssues((prevSyncingIssues) => {
+          const newSyncingIssues = new Set(prevSyncingIssues);
+          newSyncingIssues.delete(stagedIssue.id);
+          return newSyncingIssues;
+        });
+      }
+    }
+
+    // Trigger a re-render to update the IssueTable
+    setShouldRerender(!shouldRerender);
+  };
+
   useEffect(() => {
     incidentRepo.getRecords().then((issues) => {
       setStagedIssues(issues);
@@ -60,6 +100,7 @@ function StagedIssuesTab(props) {
     </div>
     <br />
     <button onClick={e => showForm(null)}> Create New Issue</button>
+    <button onClick={handleSync} style={{ float: 'right' }}> Sync</button>
   </div>
 
   const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} />;
@@ -92,7 +133,7 @@ function StagedIssuesTab(props) {
     return (
       <div>
         {header}
-        <IssueTable issues={stagedIssues} onRowTap={e => showForm(e)} rowUpdateAction={rowUpdateAction} />
+        <IssueTable issues={stagedIssues} onRowTap={e => showForm(e)} rowUpdateAction={rowUpdateAction} syncingIssues={syncingIssues} />
         {form}
       </div>
     );

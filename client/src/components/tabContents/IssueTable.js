@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-function IssueTable({ issues, rowUpdateAction, onRowTap }) {
+function IssueTable({ issues, rowUpdateAction, onRowTap, syncingIssues }) {
 
   return (
     <table className="styled-table">
@@ -33,9 +33,12 @@ function IssueTable({ issues, rowUpdateAction, onRowTap }) {
                 e.stopPropagation();
                 rowUpdateAction.actionHandler(issue);
               }}>
-              <button className='delete-button'>
-                {rowUpdateAction.title} 
-              </button> 
+
+                { 
+                syncingIssues.has(issue.id) ? (<div className="spinner" />) : (<button className='delete-button'>
+                    {rowUpdateAction.title} 
+                  </button>)
+                }
             </td>}
           </tr>
         ))}
