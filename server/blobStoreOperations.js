@@ -35,13 +35,13 @@ async function getIssues(pageNumber = 1, pageSize = 10) {
 async function createIssue(issue) {
   try {
     const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blobName = `issue${issue.id}`;
+    const blobName = `issue${issue.uid}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   
     const content = JSON.stringify(issue);
   
     await blockBlobClient.upload(content, content.length);
-    return getIssue(issue.id);  
+    return getIssue(issue.uid);  
   } catch (error) {
     console.log(error);
     throw error;

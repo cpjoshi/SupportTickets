@@ -28,25 +28,27 @@ app.get("/api/issues", async (req, res) => {
 app.post("/api/issues", async (req, res) => {
     console.log(req.body);
     try {
-        let createdIssue = await blobOperations.createIssue(req.body);
+        let issue = req.body;
+        issue.createDate = new Date().valueOf();
+        let createdIssue = await blobOperations.createIssue(issue);
         res.send(createdIssue);            
     } catch (error) {
         res.status(500).send(error.message);
     }
 })
 
-app.delete("/api/issues/:id", async (req, res) => {
+app.delete("/api/issues/:uid", async (req, res) => {
     try {
-        await blobOperations.deleteIssue(req.params.id);
+        await blobOperations.deleteIssue(req.params.uid);
         res.send("Issue deleted successfully");
     } catch (error) {
         res.status(500).send(error.message);
     }
 })
 
-app.get("/api/issues/:id", async (req, res) => {
+app.get("/api/issues/:uid", async (req, res) => {
     try {
-        let issue = await blobOperations.getIssue(req.params.id);
+        let issue = await blobOperations.getIssue(req.params.uid);
         res.send(issue);
     } catch (error) {
         res.status(404).send(error.message);
