@@ -152,6 +152,17 @@ button.active-tab {
   padding: 10px 20px;
 }
 
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  align-items: center;
+  color: gray;
+}
+
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-top: 4px solid #3498db;

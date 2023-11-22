@@ -65,6 +65,7 @@ function StagedIssuesTab(props) {
         if (response.ok) {
           // If successful, delete the issue from incidentRepo
           incidentRepo.deleteRecord(stagedIssue.id);
+          setShouldRerender(!shouldRerender);
         } else {
           console.error(`Failed to sync issue ${stagedIssue.id}. Status: ${response.status}`);
         }

@@ -1,8 +1,18 @@
 import React from 'react';
 import {getFullPageErrorInfo} from '../models/ErrorModel';
 
-function ErrorPage({ fullpageError, actionHandler}) {
+function ErrorPage({ fullpageError, actionHandler, loading}) {
     const { icon, title, description, actionTitle } = getFullPageErrorInfo(fullpageError);
+
+    if (loading) {
+        return (
+          <div className='spinner-container'>
+            <p>Loading...</p>
+            <div className='spinner'></div>
+          </div>
+        );
+      }
+
     return (
         <div className="error-page">
             <img src={icon} alt="error icon" />

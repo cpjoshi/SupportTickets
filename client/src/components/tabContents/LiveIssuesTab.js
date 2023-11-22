@@ -8,9 +8,11 @@ function LiveIssuesTab(props) {
   const [apiFetchError, setAPIFetchError] = useState(null); // TODO: use this to show error message
   const [serverIssues, setServerIssues] = useState([]);
   const [isNetworkAvailable, setNetworkAvailability] = useState(true);
+  const [isLoading, setLoading] = useState(false); 
   const teamsToken = useContext(TeamsContext).token;
 
   const fetchServerIssues = (token) => {
+    setLoading(true);
     let authHeader = 'Bearer ' + token;
     console.log(authHeader);
     fetch('/api/issues', { headers: { Authorization: authHeader } })
@@ -23,8 +25,12 @@ function LiveIssuesTab(props) {
           throw new Error('Unexpected error');
         }
       })
-      .then((data) => setServerIssues(data))
+      .then((data) => {
+        setLoading(false);
+        setServerIssues(data);
+      })
       .catch((error) => {
+        setLoading(false);
         if (error.message === 'UnAuthorized') {
           // Handle UnAuthorized error (show error message, redirect, etc.)
           console.log('UnAuthorized: TODO: show this error to the user');
@@ -40,7 +46,6 @@ function LiveIssuesTab(props) {
   useEffect(() => {
     // Fetch server issues initially
     fetchServerIssues(teamsToken);
-
   }, [teamsToken]);
 
 
@@ -73,8 +78,8 @@ function LiveIssuesTab(props) {
         <div className='hint-box'>
           <p >Issues that have been fetched from server.</p>
         </div>
-        <br/>       
-      <IssueTable issues={serverIssues}/>
+        <br/>
+        <IssueTable issues={serverIssues} />
       </div>
       );
   };
@@ -82,7 +87,7 @@ function LiveIssuesTab(props) {
   if (!isNetworkAvailable) {
     return <ErrorPage fullpageError={FullPageError.NO_INTERNET} actionHandler={handleRetry} />;
   } else if (apiFetchError != null || serverIssues.length === 0) {
-    return <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={handleRetry} />;
+    return <ErrorPage fullpageError={FullPageError.NO_DATA} actionHandler={handleRetry} loading={isLoading} />;
   } else {
     return liveIssuesPage();
   }
