@@ -65,7 +65,7 @@ function StagedIssuesTab(props) {
         if (response.ok) {
           // If successful, delete the issue from incidentRepo
           incidentRepo.deleteRecord(stagedIssue.id);
-          setShouldRerender(!shouldRerender);
+          refreshRecords();
         } else {
           console.error(`Failed to sync issue ${stagedIssue.id}. Status: ${response.status}`);
         }
@@ -80,17 +80,18 @@ function StagedIssuesTab(props) {
         });
       }
     }
-
-    // Trigger a re-render to update the IssueTable
-    setShouldRerender(!shouldRerender);
   };
 
   useEffect(() => {
+    refreshRecords();
+  }, [shouldRerender]);
+
+
+  const refreshRecords = () => {
     incidentRepo.getRecords().then((issues) => {
       setStagedIssues(issues);
     })
-  }, [shouldRerender]);
-
+  }
 
   //// UI Elements
 
