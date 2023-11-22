@@ -132,9 +132,9 @@ dist
 
 
 #teamspackage
-package/manifest.json
-package/support-tickets-teamsapp.zip
-client/makeTeamsPackage.js
+# package/manifest.json
+# package/support-tickets-teamsapp.zip
+# client/makeTeamsPackage.js
 
 #macos
 .DS_Store
