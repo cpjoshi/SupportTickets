@@ -9,7 +9,7 @@ const containerName = 'aircraft-issue-list';
 const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
 const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, sharedKeyCredential);
 
-async function getIssues(pageNumber = 1, pageSize = 10) {
+async function getIssues(pageNumber = 1, pageSize = 20) {
     const containerClient = blobServiceClient.getContainerClient(containerName);
   
     const listBlobsResponse = await containerClient.listBlobsFlat();

@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import DropDown from '../components/DropDown';
 import defaultIcon from '../assets/default-image.png';
 
-const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
+const IssueForm = ({ onSave, onClose, selectedIssue, selectedFlight, actionHandler }) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState(selectedIssue ? selectedIssue.priority : Priority[0]);
   const [status, setStatus] = useState(selectedIssue ? selectedIssue.status :Status[0]);
@@ -89,11 +89,10 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         setImage(src);
       }
     );
-  };
+  }
 
   return (
     <div className='issue-form-container' >
-
       <div className="issue-form-header">
         <h2>{selectedIssue ? 'Update Issue' : 'Create New Issue'}</h2>
         <button className="close-button" onClick={onClose}> &#9587; </button>
@@ -117,13 +116,19 @@ const IssueForm = ({ onSave, onClose, selectedIssue, actionHandler }) => {
         <DropDown name="status" options={Status} onChange={(e) => setStatus(e.target.value)} value={status}/>
 
         <label htmlFor="image">Image:</label>
-        <img id="image" className={image == null ? 'default': ''} src={image || defaultIcon} alt="Issue" onClick={(e) => selectImage(e.target.value)} />
+        
+        <img id="image" 
+          className={image == null ? 'default': ''} 
+          src={image || defaultIcon} 
+          alt="Issue" 
+          onClick={(e) => selectImage(e.target.value)}
+          style={{ height: '25%', width: '25%', objectFit: 'cover' }} 
+        />
 
       </div>
 
       <div className="form-footer">
         <button className="save-button" onClick={handleSave}> Save </button>
-        <button className="cancel-button" onClick={onClose}> Cancel </button>
       </div>
     </div>
   );

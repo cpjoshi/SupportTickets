@@ -10,6 +10,8 @@ function LiveIssuesTab(props) {
   const [isNetworkAvailable, setNetworkAvailability] = useState(true);
   const [isLoading, setLoading] = useState(false); 
   const teamsToken = useContext(TeamsContext).token;
+  const {selectedFlight} = props;
+
 
   const fetchServerIssues = (token) => {
     setLoading(true);

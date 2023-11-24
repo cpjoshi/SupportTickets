@@ -5,14 +5,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   max-width: 400px;
   width: 100%;
   border-radius: 5px;
-
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    max-width: 70%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 70%;
 }
 
 .issue-form-header {
@@ -30,7 +29,7 @@
 }
 
 .issue-form-body {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .issue-form-overlay {
@@ -51,32 +50,31 @@
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  margin: 20px;
+  margin: 10px;
 }
 
 .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   background-color: #fff;
   color: white;
 }
 
 .form-content {
-  padding: 20px;
+  padding: 10px;
 }
 
 .form-field {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   color: #555;
-    font-weight: bold;
-    margin-bottom: 8px;
+  font-weight: bold;
 }
 
 input, select{
@@ -86,7 +84,7 @@ input, select{
   border: 1px solid #555;
   border-radius: 3px;
   box-sizing: border-box;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 select {
@@ -95,13 +93,13 @@ select {
 
 .form-footer {
   display: flex;
-    flex-direction: row-reverse;
-    padding: 10px;
-    justify-content: flex-start;
+  flex-direction: row-reverse;
+  padding: 10px;
+  justify-content: center;
 }
 
 .form-footer button {
- width: 200px;;
+ width: 200px;
 }
 
 button.close-button,

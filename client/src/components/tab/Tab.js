@@ -4,7 +4,7 @@ import { TabContent } from './TabContent';
 // Create a context for the active tab
 export const TabContext = createContext({});
 
-const Tab = ({ children }) => {
+const Tab = ({ selectedFlight, children }) => {
     const [activeTab, setActiveTab] = useState(null);
 
     const handleTabChange = (tab) => {
@@ -32,7 +32,7 @@ const Tab = ({ children }) => {
             {
              tabs.map((tab, index) => {
                 return (
-                    shouldShowTabContent(tab, index) ? <TabContent tab={tab}/> : null
+                    shouldShowTabContent(tab, index) ? <TabContent tab={tab} selectedFlight={selectedFlight}/> : null
                 );   
             })}
         </TabContext.Provider>

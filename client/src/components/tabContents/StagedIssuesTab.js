@@ -14,6 +14,7 @@ function StagedIssuesTab(props) {
   const [shouldRerender, setShouldRerender] = useState(false);
   const incidentRepo = new IncidentRepository();
   const teamsToken = useContext(TeamsContext).token;
+  const {selectedFlight} = props;
 
   /// Form Visibility
 
@@ -34,6 +35,7 @@ function StagedIssuesTab(props) {
   //// Actions
 
   const handleCreateNewIssue = (newIssue) => {
+    newIssue.flightId = selectedFlight;
     let promise;
     if (selectedIssue) {
       promise = incidentRepo.updateRecordById(selectedIssue.id, newIssue);
@@ -46,12 +48,51 @@ function StagedIssuesTab(props) {
     });
   }
 
+  function dataURItoBlob(dataURI) {
+    const splitDataURI = dataURI.split(",");
+    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
+    const byteString = atob(splitDataURI[1]);
+  
+    // Create a Uint8Array from the base64 string
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+  
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+  
+    return new Blob([arrayBuffer], { type: mimeString });
+  }
+
   const handleSync = async () => {
     // Iterate over stagedIssues and post each issue to "/api/issues"
-    for (const stagedIssue of stagedIssues) {
+    let allIssues = await incidentRepo.getRecords();
+    for (const stagedIssue of allIssues) {
       try {
         // Start syncing, add issue to syncingIssues
         setSyncingIssues((prevSyncingIssues) => new Set([...prevSyncingIssues, stagedIssue.id]));
+
+        if(stagedIssue.image !== null) {
+          const blobName = stagedIssue.uid + ".jpg";
+          const containerName = process.env.REACT_APP_CONTAINERNAME;
+          const blobServiceUrl = process.env.REACT_APP_BLOBSERVICEURL;
+          //todo: get this from server
+          const sasToken = process.env.REACT_APP_SASTOKEN;
+          const blobUrlWithSAS = `${blobServiceUrl}/${containerName}/${blobName}?${sasToken}`;  
+          const blob = dataURItoBlob(stagedIssue.image);
+          let blobRespose = await fetch(blobUrlWithSAS, {
+            method: 'PUT',
+            headers: {
+              'x-ms-blob-type': 'BlockBlob',
+              'Content-Type': blob.type,
+            },
+            body: blob
+          });
+
+          if(blobRespose.ok) {
+            stagedIssue.image = blobUrlWithSAS;
+          }
+        }
 
         const response = await fetch('/api/issues', {
           method: 'POST',
@@ -68,7 +109,7 @@ function StagedIssuesTab(props) {
           refreshRecords();
         } else {
           console.error(`Failed to sync issue ${stagedIssue.id}. Status: ${response.status}`);
-        }
+        }        
       } catch (error) {
         console.error(`Error syncing issue ${stagedIssue.id}:`, error);
       } finally {
@@ -84,11 +125,11 @@ function StagedIssuesTab(props) {
 
   useEffect(() => {
     refreshRecords();
-  }, [shouldRerender]);
+  }, [shouldRerender, selectedFlight]);
 
 
   const refreshRecords = () => {
-    incidentRepo.getRecords().then((issues) => {
+    incidentRepo.getFlightRecords(selectedFlight).then((issues) => {
       setStagedIssues(issues);
     })
   }
@@ -97,15 +138,14 @@ function StagedIssuesTab(props) {
 
   const header = <div>
     <div className='hint-box'>
-      <p> - Issues that have been created or updated but not yet saved.</p>
-      <p> - Click on an issue to edit it.</p>
+      <p> Issues that have been created or updated but not yet saved. Click on an issue to edit it.</p>
     </div>
     <br />
     <button onClick={e => showForm(null)}> Create New Issue</button>
     <button onClick={handleSync} style={{ float: 'right' }}> Sync</button>
   </div>
 
-  const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} />;
+  const form = isFomVisible && <IssueForm onSave={issue => handleCreateNewIssue(issue)} onClose={hideForm} selectedIssue={selectedIssue} selectedFlight={selectedFlight}/>;
 
   //// Emtpy State
 

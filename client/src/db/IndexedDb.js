@@ -33,7 +33,6 @@ class IndexedDb {
         const tx = this.db.transaction(tableName, 'readonly');
         const store = tx.objectStore(tableName);
         const result = await store.get(id);
-        console.log('Get Data ', JSON.stringify(result));
         return result;
     }
 
@@ -41,7 +40,6 @@ class IndexedDb {
         const tx = this.db.transaction(tableName, 'readonly');
         const store = tx.objectStore(tableName);
         const result = await store.getAll();
-        console.log('Retrieve All Items: ', JSON.stringify(result));
         return result;
     }
 

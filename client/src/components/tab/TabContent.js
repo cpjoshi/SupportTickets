@@ -1,9 +1,9 @@
 
 import {componentForTab} from '../../models/AppTabsModel'
 
-const TabContent = ({ tab, key, actionHandler }) => {
+const TabContent = ({ tab, key, selectedFlight, actionHandler }) => {
     return (
-        componentForTab(tab, key, actionHandler)
+        componentForTab(tab, selectedFlight, actionHandler)
     );
 };
 

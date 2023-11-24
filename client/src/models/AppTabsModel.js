@@ -6,12 +6,12 @@ export const AppTabs = [
     { title: 'Live Issues', key: 'live' }
 ];
 
-export const componentForTab = (tab, actionHandler) => {
+export const componentForTab = (tab, selectedFlight, actionHandler) => {
     switch (tab.key) {
         case 'staged':
-            return (<StagedIssuesTab actionHandler={actionHandler} />);
+            return (<StagedIssuesTab selectedFlight={selectedFlight} actionHandler={actionHandler} />);
         case 'live':
-            return (<LiveIssuesTab actionHandler={actionHandler}/>);
+            return (<LiveIssuesTab selectedFlight={selectedFlight} actionHandler={actionHandler}/>);
         default:
             return null;
     }
