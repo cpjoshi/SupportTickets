@@ -15,9 +15,10 @@ function LiveIssuesTab(props) {
 
   const fetchServerIssues = (token) => {
     setLoading(true);
+    setServerIssues([]);
     let authHeader = 'Bearer ' + token;
     console.log(authHeader);
-    fetch('/api/issues', { headers: { Authorization: authHeader } })
+    fetch(`/api/flights/${selectedFlight}/issues`, { headers: { Authorization: authHeader } })
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -48,7 +49,7 @@ function LiveIssuesTab(props) {
   useEffect(() => {
     // Fetch server issues initially
     fetchServerIssues(teamsToken);
-  }, [teamsToken]);
+  }, [teamsToken, selectedFlight]);
 
 
   useEffect(() => {
@@ -77,11 +78,20 @@ function LiveIssuesTab(props) {
   const liveIssuesPage = () => {
     return (
       <div> 
-        <div className='hint-box'>
-          <p >Issues that have been fetched from server.</p>
-        </div>
-        <br/>
-        <IssueTable issues={serverIssues} />
+        {isLoading ? (
+          <div className='spinner-container'>
+            <p>Loading...</p>
+            <div className='spinner'></div>
+          </div>
+        ) : (
+          <>
+            <div className='hint-box'>
+              <p>Issues that have been fetched from the server.</p>
+            </div>
+            <br/>
+            <IssueTable issues={serverIssues} />
+          </>
+        )}
       </div>
       );
   };

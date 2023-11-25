@@ -32,6 +32,30 @@ async function getIssues(pageNumber = 1, pageSize = 20) {
     return paginatedIssues;
 }
 
+async function getIssues(flightId, pageNumber = 1, pageSize = 20) {
+  let containerClient = blobServiceClient.getContainerClient(containerName);
+
+  let listBlobsResponse = await containerClient.listBlobsFlat();
+  let allIssues = [];
+
+  for await (const blob of listBlobsResponse) {
+    const blobClient = containerClient.getBlobClient(blob.name);
+    const downloadBlockBlobResponse = await blobClient.download();
+    const content = await streamToString(downloadBlockBlobResponse.readableStreamBody);
+    allIssues.push(JSON.parse(content));
+  }
+
+  allIssues = allIssues.filter(i => i.flightId === flightId);
+  // Sort issues by createdDate in descending order
+  allIssues.sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
+
+  const startIndex = (pageNumber - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedIssues = allIssues.slice(startIndex, endIndex);
+
+  return paginatedIssues;
+}
+
 async function createIssue(issue) {
   try {
     const containerClient = blobServiceClient.getContainerClient(containerName);

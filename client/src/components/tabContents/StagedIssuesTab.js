@@ -94,7 +94,7 @@ function StagedIssuesTab(props) {
           }
         }
 
-        const response = await fetch('/api/issues', {
+        const response = await fetch(`/api/flights/${selectedFlight}/issues`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
