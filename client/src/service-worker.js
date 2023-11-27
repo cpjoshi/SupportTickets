@@ -41,6 +41,11 @@ registerRoute(
       return false;
     } // Return true to signal that we want to use the handler.
 
+    if(url.pathname.indexOf("/api/")) {
+      console.log('API not cached: ' + url);
+      return false;
+    }
+
     return true;
   },
   createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html')
